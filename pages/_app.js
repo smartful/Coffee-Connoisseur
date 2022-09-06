@@ -5,9 +5,6 @@ function MyApp({ Component, pageProps }) {
   return (
     <Fragment>
       <Component {...pageProps} />
-      <footer>
-        <p>© 2022 Gandalf</p>
-      </footer>
     </Fragment>
   );
 }
