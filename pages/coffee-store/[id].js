@@ -1,15 +1,41 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-const CoffeeStore = () => {
+import coffeeStoresData from "../../data/coffee-store.json";
+
+export function getStaticPaths() {
+  return {
+    paths: coffeeStoresData.map((coffeeStore) => ({
+      params: { id: coffeeStore.id.toString() },
+    })),
+    fallback: false,
+  };
+}
+
+export function getStaticProps({ params }) {
+  return {
+    props: {
+      coffeeStore: coffeeStoresData.find(
+        (coffeeStore) => coffeeStore.id.toString() === params.id
+      ),
+    },
+  };
+}
+
+const CoffeeStore = ({ coffeeStore }) => {
   const router = useRouter();
   const { id } = router.query;
+
   return (
     <div>
-      <Link href="/">
-        <a>Back to home</a>
-      </Link>
-      <div>Coffee Store Page : {id}</div>;
+      <button>
+        <Link href="/">
+          <a>Back to home</a>
+        </Link>
+      </button>
+      <div>Coffee Store Page : {id}</div>
+      <p>{coffeeStore.name}</p>
+      <p>{coffeeStore.address}</p>
     </div>
   );
 };
