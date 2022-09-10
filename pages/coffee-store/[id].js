@@ -30,6 +30,10 @@ const CoffeeStore = ({ coffeeStore }) => {
   const router = useRouter();
   const { id } = router.query;
 
+  const handleUpVoteButton = () => {
+    console.log("handle Up Vote !");
+  };
+
   return (
     <div className={styles.layout}>
       <Head>
@@ -52,14 +56,42 @@ const CoffeeStore = ({ coffeeStore }) => {
             width={600}
             height={360}
             className={styles.storeImg}
-            alt={name}
+            alt={coffeeStore.name}
           />
         </div>
 
         <div className={classnames("glass", styles.col2)}>
-          <div className={styles.iconWrapper}></div>
-          <p>{coffeeStore.address}</p>
-          <p>{coffeeStore.neighbourhood}</p>
+          <div className={styles.iconWrapper}>
+            <Image
+              src="/static/icons/places.svg"
+              width={24}
+              height={24}
+              alt="icon address"
+            />
+            <p className={styles.text}>{coffeeStore.address}</p>
+          </div>
+          <div className={styles.iconWrapper}>
+            <Image
+              src="/static/icons/nearMe.svg"
+              width={24}
+              height={24}
+              alt="icon neighbourhood"
+            />
+            <p className={styles.text}>{coffeeStore.neighbourhood}</p>
+          </div>
+          <div className={styles.iconWrapper}>
+            <Image
+              src="/static/icons/star.svg"
+              width={24}
+              height={24}
+              alt="icon vote"
+            />
+            <p className={styles.text}>1</p>
+          </div>
+
+          <button className={styles.upVoteButton} onClick={handleUpVoteButton}>
+            Up Vote
+          </button>
         </div>
       </div>
     </div>
