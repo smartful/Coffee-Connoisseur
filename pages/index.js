@@ -1,9 +1,10 @@
-import { Fragment } from "react";
+import { useEffect } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import Banner from "../components/banner";
 import Card from "../components/card";
 import { fetchCoffeeStores } from "../lib/coffee-stores";
+import useTrackLocation from "../hooks/use-track-location";
 import styles from "../styles/Home.module.css";
 
 export async function getStaticProps(context) {
@@ -17,8 +18,30 @@ export async function getStaticProps(context) {
 }
 
 export default function Home({ coffeeStores }) {
+  const {
+    handlerTrackLocation,
+    latlong,
+    locationErrorMessage,
+    isFindingLocation,
+  } = useTrackLocation();
+
+  useEffect(() => {
+    const setCoffeeStoreByLocation = async () => {
+      if (latlong) {
+        try {
+          const fetchedCoffeeStores = await fetchCoffeeStores(latlong, 30);
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    };
+
+    setCoffeeStoreByLocation();
+  }, [latlong]);
+
   const handleOnBannerBtnClick = () => {
-    console.log("Banner Button !");
+    handlerTrackLocation();
+    console.log({ latlong, locationErrorMessage, isFindingLocation });
   };
 
   return (
@@ -31,9 +54,12 @@ export default function Home({ coffeeStores }) {
 
       <main className={styles.main}>
         <Banner
-          buttonText="View stores nearby"
+          buttonText={isFindingLocation ? "Locating..." : "View stores nearby"}
           handleOnClick={handleOnBannerBtnClick}
         />
+        {locationErrorMessage && (
+          <p>`Something went wrong : ${locationErrorMessage}`</p>
+        )}
         <div className={styles.heroImage}>
           <Image
             src="/static/hero-image.png"
@@ -43,7 +69,7 @@ export default function Home({ coffeeStores }) {
           />
         </div>
         {coffeeStores.length > 0 && (
-          <Fragment>
+          <div className={styles.sectionWrapper}>
             <h2 className={styles.heading2}>Vierzon stores</h2>
             <div className={styles.cardLayout}>
               {coffeeStores.map((coffeeStore) => {
@@ -61,7 +87,7 @@ export default function Home({ coffeeStores }) {
                 );
               })}
             </div>
-          </Fragment>
+          </div>
         )}
       </main>
     </div>
