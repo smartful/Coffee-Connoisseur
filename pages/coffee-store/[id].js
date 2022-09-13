@@ -1,7 +1,6 @@
 import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
-import { useRouter } from "next/router";
 import classnames from "classnames";
 import { fetchCoffeeStores } from "../../lib/coffee-stores";
 import styles from "../../styles/coffee-store.module.css";
@@ -11,7 +10,7 @@ export async function getStaticPaths() {
 
   return {
     paths: coffeeStores.map((coffeeStore) => ({
-      params: { id: coffeeStore.fsq_id.toString() },
+      params: { id: coffeeStore.id.toString() },
     })),
     fallback: false,
   };
@@ -23,15 +22,14 @@ export async function getStaticProps({ params }) {
   return {
     props: {
       coffeeStore: coffeeStores.find(
-        (coffeeStore) => coffeeStore.fsq_id.toString() === params.id
+        (coffeeStore) => coffeeStore.id.toString() === params.id
       ),
     },
   };
 }
 
 const CoffeeStore = ({ coffeeStore }) => {
-  const router = useRouter();
-  const { id } = router.query;
+  const { name, address, region, imgUrl } = coffeeStore;
 
   const handleUpVoteButton = () => {
     console.log("handle Up Vote !");
@@ -40,29 +38,29 @@ const CoffeeStore = ({ coffeeStore }) => {
   return (
     <div className={styles.layout}>
       <Head>
-        <title>{coffeeStore.name}</title>
+        <title>{name}</title>
       </Head>
 
       <div className={styles.container}>
         <div className={styles.col1}>
           <div className={styles.backToHomeLink}>
             <Link href="/">
-              <a>Back to home</a>
+              <a>← Back to home</a>
             </Link>
           </div>
 
           <div className={styles.nameWrapper}>
-            <h1 className={styles.name}>{coffeeStore.name}</h1>
+            <h1 className={styles.name}>{name}</h1>
           </div>
           <Image
             src={
-              coffeeStore.imgUrl ||
+              imgUrl ||
               "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1171&q=80"
             }
             width={600}
             height={360}
             className={styles.storeImg}
-            alt={coffeeStore.name}
+            alt={name}
           />
         </div>
 
@@ -74,9 +72,7 @@ const CoffeeStore = ({ coffeeStore }) => {
               height={24}
               alt="icon address"
             />
-            <p className={styles.text}>
-              {coffeeStore?.location?.formatted_address}
-            </p>
+            <p className={styles.text}>{address}</p>
           </div>
           <div className={styles.iconWrapper}>
             <Image
@@ -85,7 +81,7 @@ const CoffeeStore = ({ coffeeStore }) => {
               height={24}
               alt="icon neighbourhood"
             />
-            <p className={styles.text}>{coffeeStore?.location?.region}</p>
+            <p className={styles.text}>{region}</p>
           </div>
           <div className={styles.iconWrapper}>
             <Image

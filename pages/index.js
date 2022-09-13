@@ -26,7 +26,6 @@ export default function Home({ coffeeStores }) {
       <Head>
         <title>Coffee Connoisseur</title>
         <meta name="description" content="Coffee Connoisseur" />
-
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
@@ -45,14 +44,14 @@ export default function Home({ coffeeStores }) {
         </div>
         {coffeeStores.length > 0 && (
           <Fragment>
-            <h2 className={styles.heading2}>Toronto stores</h2>
+            <h2 className={styles.heading2}>Vierzon stores</h2>
             <div className={styles.cardLayout}>
               {coffeeStores.map((coffeeStore) => {
                 return (
                   <Card
-                    key={coffeeStore.fsq_id}
+                    key={coffeeStore.id}
                     name={coffeeStore.name}
-                    href={`/coffee-store/${coffeeStore.fsq_id}`}
+                    href={`/coffee-store/${coffeeStore.id}`}
                     imgUrl={
                       coffeeStore.imgUrl ||
                       "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1171&q=80"
