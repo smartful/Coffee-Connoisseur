@@ -74,7 +74,9 @@ const CoffeeStore = ({ coffeeStore }) => {
               height={24}
               alt="icon address"
             />
-            <p className={styles.text}>{coffeeStore.address}</p>
+            <p className={styles.text}>
+              {coffeeStore?.location?.formatted_address}
+            </p>
           </div>
           <div className={styles.iconWrapper}>
             <Image
@@ -83,7 +85,7 @@ const CoffeeStore = ({ coffeeStore }) => {
               height={24}
               alt="icon neighbourhood"
             />
-            <p className={styles.text}>{coffeeStore.neighbourhood}</p>
+            <p className={styles.text}>{coffeeStore?.location?.region}</p>
           </div>
           <div className={styles.iconWrapper}>
             <Image
