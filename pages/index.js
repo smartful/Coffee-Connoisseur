@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import Banner from "../components/banner";
@@ -17,7 +17,7 @@ export async function getStaticProps(context) {
   };
 }
 
-export default function Home({ coffeeStores }) {
+export default function Home(props) {
   const {
     handlerTrackLocation,
     latlong,
@@ -25,13 +25,18 @@ export default function Home({ coffeeStores }) {
     isFindingLocation,
   } = useTrackLocation();
 
+  const [coffeeStores, setCoffeeStores] = useState([]);
+  const [coffeeStoresError, setCoffeeStoresError] = useState(null);
+
   useEffect(() => {
     const setCoffeeStoreByLocation = async () => {
       if (latlong) {
         try {
           const fetchedCoffeeStores = await fetchCoffeeStores(latlong, 30);
+          setCoffeeStores(fetchedCoffeeStores);
         } catch (error) {
           console.error(error);
+          setCoffeeStoresError(error?.message);
         }
       }
     };
@@ -60,6 +65,9 @@ export default function Home({ coffeeStores }) {
         {locationErrorMessage && (
           <p>`Something went wrong : ${locationErrorMessage}`</p>
         )}
+        {coffeeStoresError && (
+          <p>`Something went wrong : ${coffeeStoresError}`</p>
+        )}
         <div className={styles.heroImage}>
           <Image
             src="/static/hero-image.png"
@@ -70,9 +78,31 @@ export default function Home({ coffeeStores }) {
         </div>
         {coffeeStores.length > 0 && (
           <div className={styles.sectionWrapper}>
-            <h2 className={styles.heading2}>Vierzon stores</h2>
+            <h2 className={styles.heading2}>Stores near me</h2>
             <div className={styles.cardLayout}>
               {coffeeStores.map((coffeeStore) => {
+                return (
+                  <Card
+                    key={coffeeStore.id}
+                    name={coffeeStore.name}
+                    href={`/coffee-store/${coffeeStore.id}`}
+                    imgUrl={
+                      coffeeStore.imgUrl ||
+                      "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1171&q=80"
+                    }
+                    className={styles.card}
+                  />
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {props.coffeeStores.length > 0 && (
+          <div className={styles.sectionWrapper}>
+            <h2 className={styles.heading2}>Vierzon stores</h2>
+            <div className={styles.cardLayout}>
+              {props.coffeeStores.map((coffeeStore) => {
                 return (
                   <Card
                     key={coffeeStore.id}

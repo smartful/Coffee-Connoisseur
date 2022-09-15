@@ -12,18 +12,19 @@ export async function getStaticPaths() {
     paths: coffeeStores.map((coffeeStore) => ({
       params: { id: coffeeStore.id.toString() },
     })),
-    fallback: false,
+    fallback: true,
   };
 }
 
 export async function getStaticProps({ params }) {
   const coffeeStores = await fetchCoffeeStores();
+  const findCoffeeStoreById = coffeeStores.find(
+    (coffeeStore) => coffeeStore.id.toString() === params.id
+  );
 
   return {
     props: {
-      coffeeStore: coffeeStores.find(
-        (coffeeStore) => coffeeStore.id.toString() === params.id
-      ),
+      coffeeStore: findCoffeeStoreById ? findCoffeeStoreById : {},
     },
   };
 }
