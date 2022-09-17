@@ -26,9 +26,6 @@ export async function getStaticProps({ params }) {
     (coffeeStore) => coffeeStore.id.toString() === params.id
   );
 
-  console.log({ params });
-  console.log({ findCoffeeStoreById });
-
   return {
     props: {
       coffeeStore: findCoffeeStoreById ? findCoffeeStoreById : {},
@@ -41,11 +38,6 @@ const CoffeeStore = (initialProps) => {
 
   const id = router.query.id;
   const [coffeeStore, setCoffeeStore] = useState(initialProps.CoffeeStore);
-
-  console.log({ id });
-  console.log({ initialProps });
-  console.log({ coffeeStore });
-
   const {
     state: { coffeeStores },
   } = useContext(StoreContext);

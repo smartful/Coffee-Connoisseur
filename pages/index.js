@@ -48,7 +48,6 @@ export default function Home(props) {
 
   const handleOnBannerBtnClick = () => {
     handlerTrackLocation();
-    console.log({ latlong, locationErrorMessage, isFindingLocation });
   };
 
   return (
