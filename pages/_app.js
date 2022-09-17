@@ -1,11 +1,11 @@
-import { Fragment } from "react";
+import StoreProvider from "../store/store-context";
 import "../styles/globals.css";
 
 function MyApp({ Component, pageProps }) {
   return (
-    <Fragment>
+    <StoreProvider>
       <Component {...pageProps} />
-    </Fragment>
+    </StoreProvider>
   );
 }
 
